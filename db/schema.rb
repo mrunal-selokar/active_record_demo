@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170119120048) do
+ActiveRecord::Schema.define(version: 20170119123137) do
 
   create_table "accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "account_no"
@@ -20,6 +20,15 @@ ActiveRecord::Schema.define(version: 20170119120048) do
     t.integer  "branch_id"
     t.index ["account_no"], name: "index_accounts_on_account_no", unique: true, using: :btree
     t.index ["branch_id"], name: "fk_rails_d72169e1fc", using: :btree
+  end
+
+  create_table "borrowers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "loan_no"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "customer_id"
+    t.index ["customer_id"], name: "fk_rails_adb52ef1bc", using: :btree
+    t.index ["loan_no"], name: "fk_rails_f82203836b", using: :btree
   end
 
   create_table "branches", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -54,9 +63,12 @@ ActiveRecord::Schema.define(version: 20170119120048) do
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
     t.index ["branch_id"], name: "fk_rails_4fddf418d4", using: :btree
+    t.index ["loan_no"], name: "index_loans_on_loan_no", unique: true, using: :btree
   end
 
   add_foreign_key "accounts", "branches"
+  add_foreign_key "borrowers", "customers"
+  add_foreign_key "borrowers", "loans", column: "loan_no"
   add_foreign_key "depositors", "accounts", column: "account_no"
   add_foreign_key "depositors", "customers"
   add_foreign_key "loans", "branches"
