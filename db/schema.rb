@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170119104629) do
+ActiveRecord::Schema.define(version: 20170119120048) do
 
   create_table "accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "account_no"
@@ -38,6 +38,15 @@ ActiveRecord::Schema.define(version: 20170119104629) do
     t.string   "customer_name"
   end
 
+  create_table "depositors", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "customer_id"
+    t.integer  "account_no"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["account_no"], name: "fk_rails_5ecc9df711", using: :btree
+    t.index ["customer_id"], name: "fk_rails_4ad7797891", using: :btree
+  end
+
   create_table "loans", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "loan_no"
     t.integer  "branch_id"
@@ -48,5 +57,7 @@ ActiveRecord::Schema.define(version: 20170119104629) do
   end
 
   add_foreign_key "accounts", "branches"
+  add_foreign_key "depositors", "accounts", column: "account_no"
+  add_foreign_key "depositors", "customers"
   add_foreign_key "loans", "branches"
 end
