@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170123062406) do
+ActiveRecord::Schema.define(version: 20170123062915) do
 
   create_table "accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.float    "balance",    limit: 24
@@ -45,6 +45,15 @@ ActiveRecord::Schema.define(version: 20170123062406) do
     t.string   "customer_name"
   end
 
+  create_table "depositors", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "customer_id"
+    t.integer  "account_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["account_id"], name: "fk_rails_682561d421", using: :btree
+    t.index ["customer_id"], name: "fk_rails_4ad7797891", using: :btree
+  end
+
   create_table "loans", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "branch_id"
     t.float    "amount",     limit: 24
@@ -56,5 +65,7 @@ ActiveRecord::Schema.define(version: 20170123062406) do
   add_foreign_key "accounts", "branches"
   add_foreign_key "borrowers", "customers"
   add_foreign_key "borrowers", "loans", column: "loan_no"
+  add_foreign_key "depositors", "accounts"
+  add_foreign_key "depositors", "customers"
   add_foreign_key "loans", "branches"
 end
